@@ -5,7 +5,7 @@ import "@/styles/global.css";
 import Head from "next/head";
 import { Noto_Sans_KR } from "next/font/google";
 import Script from "next/script";
-import { GA_TRACKING_ID } from "@/lib/gtag";
+import * as gtag from "@/lib/gtag";
 
 const notoSansKR = Noto_Sans_KR({
   weight: ["400", "700"],
@@ -18,7 +18,7 @@ export default function App({ Component, pageProps }) {
       {/* <!-- Google tag (gtag.js) --> */}
       <Script
         async
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
       ></Script>
       <Script
         id="ga-script"
@@ -27,7 +27,7 @@ export default function App({ Component, pageProps }) {
           __html: `window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${GA_TRACKING_ID}', {page_path: window.location.pathname,});`,
+          gtag('config', '${gtag.GA_TRACKING_ID}', {page_path: window.location.pathname,});`,
         }}
       />
 
