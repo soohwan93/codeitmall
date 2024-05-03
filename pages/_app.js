@@ -6,7 +6,7 @@ import Head from "next/head";
 import { Noto_Sans_KR } from "next/font/google";
 import Script from "next/script";
 import * as gtag from "@/lib/gtag";
-
+import { GoogleAnalytics } from "@next/third-parties/google";
 const notoSansKR = Noto_Sans_KR({
   weight: ["400", "700"],
   subsets: [],
@@ -15,22 +15,6 @@ const notoSansKR = Noto_Sans_KR({
 export default function App({ Component, pageProps }) {
   return (
     <>
-      {/* <!-- Google tag (gtag.js) --> */}
-      <Script
-        async
-        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-      ></Script>
-      <Script
-        id="ga-script"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${gtag.GA_TRACKING_ID}', {page_path: window.location.pathname,});`,
-        }}
-      />
-
       <Head>
         <title>Codeitmall</title>
         <link rel="icon" href="/product.jpeg" />
@@ -48,6 +32,7 @@ export default function App({ Component, pageProps }) {
           <Component {...pageProps} />
         </Container>
       </ThemeProvider>
+      <GoogleAnalytics gaId={gtag.GA_TRACKING_ID} />
     </>
   );
 }
