@@ -5,33 +5,38 @@ import styles from "@/styles/Product.module.css";
 import SizeReviewList from "@/components/SizeReviewList";
 import StarRating from "@/components/StarRating";
 import Image from "next/image";
+import Spinner from "@/components/Spinner";
 
-export default function Product() {
-  const [product, setProduct] = useState();
-  const [sizeReviews, setSizeReviews] = useState([]);
-  const router = useRouter();
-  const { id } = router.query;
-
-  async function getProduct(targetId) {
-    const res = await axios.get(`/products/${targetId}`);
-    const nextProduct = res.data;
-    setProduct(nextProduct);
+export async function getServerSideProps(context) {
+  const productId = context.params["id"];
+  let product;
+  try {
+    const res = await axios.get(`/products/${productId}`);
+    product = res.data;
+  } catch (error) {
+    return {
+      notFound: true,
+    };
   }
 
-  async function getSizeReviews(targetId) {
-    const res = await axios.get(`/size_reviews/?product_id=${targetId}`);
-    const nextSizeReviews = res.data.results ?? [];
-    setSizeReviews(nextSizeReviews);
-  }
+  const res = await axios.get(`/size_reviews/?product_id=${productId}`);
+  const sizeReviews = res.data.results ?? [];
 
-  useEffect(() => {
-    if (!id) return;
+  return {
+    props: {
+      product,
+      sizeReviews,
+    },
+  };
+}
 
-    getProduct(id);
-    getSizeReviews(id);
-  }, [id]);
-
-  if (!product) return null;
+export default function Product({ product, sizeReviews }) {
+  if (!product)
+    return (
+      <div className={styles.loading}>
+        <Spinner />
+      </div>
+    );
 
   return (
     <>
