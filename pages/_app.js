@@ -15,6 +15,23 @@ const notoSansKR = Noto_Sans_KR({
 export default function App({ Component, pageProps }) {
   return (
     <>
+      {/* <!-- Google tag (gtag.js) --> */}
+
+      <Script
+        async
+        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+      ></Script>
+      <Script
+        id="ga-script"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${gtag.GA_TRACKING_ID}', {page_path: window.location.pathname,});`,
+        }}
+      />
+
       <Head>
         <title>Codeitmall</title>
         <link rel="icon" href="/product.jpeg" />
@@ -32,7 +49,6 @@ export default function App({ Component, pageProps }) {
           <Component {...pageProps} />
         </Container>
       </ThemeProvider>
-      <GoogleAnalytics gaId={gtag.GA_TRACKING_ID} />
     </>
   );
 }
